@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Hello Handlebars </title>
+    <script src="handlebars-v4.0.5.js">
+    </script>
+</head>
+
+<body>
+
+    <div id="quoteData"></div>
+
+    <script id="the-template" type="text/x-handlebars-template">
+      {{#makeRadio "size"}}
+        Small
+        Medium
+        Large
+      {{/makeRadio}}
+    </script>
+
+    <script type="text/javascript">
+      var templateInfo = document.getElementById("the-template").innerHTML;
+      var template = Handlebars.compile(templateInfo);
+
+      Handlebars.registerHelper("makeRadio", function(name, options) {
+        var radioList = options.fn();
+        radioList = radioList.trim().split('\n');
+        var output = "";
+        for (var val in radioList) {
+          var item = radioList[val].trim();
+          output += '<input type="radio" name="' + name + '"value="' + item + '">' + item + '<br>';
+        }
+        return output;
+      });
+
+
+
+      var templateData = template ({});
+      document.getElementById("quoteData").innerHTML += templateData;
+
+    </script>
+
+</body>
+
+
+</html>
