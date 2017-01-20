@@ -1,0 +1,77 @@
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <div className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h2>Welcome to Userful</h2>
+        </div>
+        <p className="App-intro">
+          <Welcome name={Data.zoneId} me="Hi"/>
+          To get started, edit <code>src/App.js</code> and save to reload.
+        </p>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+function Welcome(props) {
+  return <h2> Hello, {props.name} </h2> ;
+}
+
+function Display(props) {
+  return
+
+}
+var Data = {
+  "zoneId": "987da782-e721-11e5-9730-9a79f06e5689",
+  "zoneName": "Zone-2",
+  "isPlaying": true,
+  "playingSourceID": "6B199B42-4900-4C07-A11E-F6014C81B292",
+  "welcomeScreenType": "NORMAL",
+  "controllerDisplayID": 1,
+  "zoneDisplays": [
+    {
+      "displayId": 1,
+      "isSelected": true,
+      "rotationDegree": 0,
+      "centerX": 221.3801864296355,
+      "centerY": 393.57906460001004,
+      "width": 442.760372859271,
+      "height": 249.05270973333995
+    },
+    {
+      "displayId": 2,
+      "isSelected": true,
+      "rotationDegree": 0,
+      "centerX": 684.1405592889065,
+      "centerY": 124.52635486666998,
+      "width": 442.760372859271,
+      "height": 249.05270973333995
+    },
+    {
+      "displayId": 3,
+      "isSelected": true,
+      "rotationDegree": 0,
+      "centerX": 221.3801864296355,
+      "centerY": 124.52635486666998,
+      "width": 442.760372859271,
+      "height": 249.05270973333995
+    },
+    {
+      "displayId": 4,
+      "isSelected": false,
+      "rotationDegree": -0.2,
+      "centerX": 684.1405592889065,
+      "centerY": 393.57906460001004,
+      "width": 442.760372859271,
+      "height": 249.05270973333995
+    }
+  ]
+}
