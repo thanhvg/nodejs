@@ -48,7 +48,8 @@ var Data = {
       "height": 249.05270973333995
     }
   ]
-}
+};
+
 var Data2 = {
   "zoneId": "987da782-e721-11e5-9730-9a79f06e5689",
   "zoneName": "Zone-1",
@@ -112,11 +113,101 @@ var Data2 = {
      "height": 249.05270973333995
    }
   ]
-}
+};
 
-var downStyle = {
-  position: 'relative'
-}
+var Data3 = {
+  "zoneId": "13F0950C-3CF7-4018-B7B3-D3326FBFFBE7",
+  "zoneName": "Привет мир",
+  "isPlaying": true,
+  "playingSourceId": "",
+  "welcomeScreenType": "UNMAPPED",
+  "controlDisplayId": 2,
+  "zoneDisplays": [
+    {
+      "displayId": 2,
+      "isSelected": true,
+      "rotationDegree": 0.1,
+      "centerX": 221.3801864296355,
+      "centerY": 261.5053452200069,
+      "width": 376.34631693038034,
+      "height": 211.69480327333895
+    },
+    {
+      "displayId": 0,
+      "isSelected": true,
+      "rotationDegree": 0.5,
+      "centerX": 221.3801864296355,
+      "centerY": 667.5370453066838,
+      "width": 442.760372859271,
+      "height": 249.05270973333995
+    },
+    {
+      "displayId": 3,
+      "isSelected": true,
+      "rotationDegree": -0.7,
+      "centerX": 927.6587643615055,
+      "centerY": 261.5053452200069,
+      "width": 929.7967830044691,
+      "height": 523.0106904400138
+    },
+    {
+      "displayId": 4,
+      "isSelected": true,
+      "rotationDegree": 0.3,
+      "centerX": 927.6587643615055,
+      "centerY": 667.5370453066838,
+      "width": 442.760372859271,
+      "height": 249.05270973333995
+    }
+  ]
+};
+
+var Data4 = {
+  "zoneId": "13F0950C-3CF7-4018-B7B3-D3326FBFFBE7",
+  "zoneName": "Привет мир",
+  "isPlaying": false,
+  "playingSourceId": "",
+  "welcomeScreenType": "UNMAPPED",
+  "controlDisplayId": 2,
+  "zoneDisplays": [
+    {
+      "displayId": 2,
+      "isSelected": true,
+      "rotationDegree": 0,
+      "centerX": 221.3801864296355,
+      "centerY": 261.50534522000686,
+      "width": 376.34631693038034,
+      "height": 211.69480327333895
+    },
+    {
+      "displayId": 0,
+      "isSelected": true,
+      "rotationDegree": -0.40142572795869597,
+      "centerX": 221.3801864296355,
+      "centerY": 667.5370453066838,
+      "width": 442.760372859271,
+      "height": 249.05270973333992
+    },
+    {
+      "displayId": 3,
+      "isSelected": true,
+      "rotationDegree": -0.20943951023931953,
+      "centerX": 966.3409304164834,
+      "centerY": 298.3455033676047,
+      "width": 929.7967830044691,
+      "height": 523.0106904400138
+    },
+    {
+      "displayId": 4,
+      "isSelected": true,
+      "rotationDegree": -0.5061454830783557,
+      "centerX": 927.6587643615055,
+      "centerY": 667.5370453066838,
+      "width": 442.760372859271,
+      "height": 249.05270973333992
+    }
+  ]
+};
 
 class App extends Component {
 
@@ -131,14 +222,16 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <Welcome name={Data.zoneId} me="Hi" display={Data.zoneDisplays[0]}/>
+        {/*
         <Display monitor={Data.zoneDisplays[0]}/>
         <Display monitor={Data.zoneDisplays[1]}/>
         <Display monitor={Data.zoneDisplays[2]}/>
-
+        */}
         <Frame data={Data2}/>
-        <div style={downStyle}>
-          <Frame data={Data}/>
-        </div>
+        <Frame data={Data}/>
+        <Frame data={Data3}/>
+        <Frame data={Data4}/>
+
       </div>
     );
   }
@@ -151,26 +244,100 @@ function Welcome(props) {
 }
 
 function Frame(props) {
-  const displayList = props.data.zoneDisplays;
+
+
+  const myData = makeData(props.data);
+
+  const displayList = myData.zoneDisplays;
+
   const displays = displayList.map(
-    (display) => <Display monitor={display} key = {display.displayId} />
+    (display) => <Display monitor={display} key={display.displayId} />
   );
-  return <div style={{position:'relative'}}>{displays}</div> ;
+
+  const divStyle = {
+    position: 'relative',
+    width: Math.max.apply(Math, myData.zoneDisplays.map(function(o){return o.containerRight})),
+    height: Math.max.apply(Math, myData.zoneDisplays.map(function(o){return o.containerBottom})),
+    borderStyle:'solid',
+    borderColor: 'red'
+  }
+  return <div style={divStyle}>{displays}</div> ;
 
 }
 
-function Display(props) {
-  const divStyle = {
-    transform: 'rotate('+ props.monitor.rotationDegree + 'rad)',
-    transformOrigin: '50% 50% 0px',
-    position: 'absolute',
-    opacity: 1,
-    left: props.monitor.centerX + 'px',
-    top: props.monitor.centerY + 'px'
+
+class Display extends Component {
+  constructor(props) {
+    super(props);
+
+    const merge = (x, y) => {return ( x - y);};
+
+    this.divStyle = {
+      transform: 'rotate('+ props.monitor.rotationDegree + 'rad)',
+      transformOrigin: '50% 50% 0px',
+      position: 'absolute',
+      opacity: 1,
+      // left: merge(props.monitor.centerX, props.monitor.width/2) + 'px',
+      // top: merge(props.monitor.centerY, props.monitor.height/2) + 'px'
+      left: merge(props.monitor.width, props.monitor.containerWidth) + 'px',
+      top: merge(props.monitor.height, props.monitor.containerHeight) + 'px'
+      // left: props.monitor.centerX  + 'px',
+      // top: props.monitor.centerY  + 'px'
+      // left: props.monitor.containerX  + 'px',
+      // top: props.monitor.containerY  + 'px'
+    } ;
+
+    this.handleClick = this.handleClick.bind(this);
+
   }
+  handleClick() {
+      const dimensions = this.refs.display.getBoundingClientRect();
+      console.log('this is:',  dimensions.width + " x " + dimensions.height);
+      const dim = makeTransDimesions({height: this.props.monitor.height, width:this.props.monitor.width }, this.props.monitor.rotationDegree);
+      console.log ('dim calc: ' + dim.width + "x" + dim.height);
+      // makeData(Data);
 
-  return (<div style={divStyle}>
-            <img src={monitorImg} height={props.monitor.height} width={props.monitor.width}/>
-        </div> );
+    }
 
+
+
+  // componentDidMount() {
+  //   this.handleClick();
+  // }
+
+  render() {
+      return (<div style={this.divStyle} onClick={this.handleClick} ref='display'>
+                <img src={monitorImg} height={this.props.monitor.height} width={this.props.monitor.width}/>
+            </div> );
+    }
+}
+
+
+function makeTransDimesions(dimensions, rad) {
+  var obj = {
+    width: dimensions.height*Math.abs(Math.sin(rad)) + dimensions.width*Math.abs(Math.cos(rad)),
+    height: dimensions.height*Math.abs(Math.cos(rad)) + dimensions.width*Math.abs(Math.sin(rad))
+  };
+  return obj;
+}
+
+function makeContainerDim(zoneDisplay) {
+  // give me an object, i make new fields to it
+  const obj = makeTransDimesions(zoneDisplay, zoneDisplay.rotationDegree);
+  const newZoneDisplay = Object.assign({}, zoneDisplay);
+  newZoneDisplay.containerHeight = obj.height;
+  newZoneDisplay.containerWidth = obj.width;
+  newZoneDisplay.containerX = newZoneDisplay.centerX - obj.width/2;
+  newZoneDisplay.containerY = newZoneDisplay.centerY - obj.height/2;
+  newZoneDisplay.containerRight = newZoneDisplay.centerX + obj.width/2;
+  newZoneDisplay.containerBottom = newZoneDisplay.centerY + obj.height/2;
+  return newZoneDisplay;
+}
+
+function makeData(data) {
+  const newData = Object.assign({}, data);
+  newData.zoneDisplays.forEach((item, index) => {newData.zoneDisplays[index] = makeContainerDim(item)});
+
+  console.log(newData);
+  return newData;
 }
