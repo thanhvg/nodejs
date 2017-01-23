@@ -209,6 +209,27 @@ var Data4 = {
   ]
 };
 
+
+var Data5 = {
+  "zoneId": "13F0950C-3CF7-4018-B7B3-D3326FBFFBE7",
+  "zoneName": "Привет мир",
+  "isPlaying": false,
+  "playingSourceId": "",
+  "welcomeScreenType": "UNMAPPED",
+  "controlDisplayId": 2,
+  "zoneDisplays": [
+    {
+      "displayId": 2,
+      "isSelected": true,
+      "rotationDegree": 0.5,
+      "centerX": 221.3801864296355,
+      "centerY": 261.50534522000686,
+      "width": 376.34631693038034,
+      "height": 211.69480327333895
+    }
+  ]
+};
+
 class App extends Component {
 
   render() {
@@ -231,6 +252,7 @@ class App extends Component {
         <Frame data={Data}/>
         <Frame data={Data3}/>
         <Frame data={Data4}/>
+        <Frame data={Data5}/>
 
       </div>
     );
@@ -259,7 +281,8 @@ function Frame(props) {
     width: Math.max.apply(Math, myData.zoneDisplays.map(function(o){return o.containerRight})),
     height: Math.max.apply(Math, myData.zoneDisplays.map(function(o){return o.containerBottom})),
     borderStyle:'solid',
-    borderColor: 'red'
+    borderColor: 'red',
+    overFlow: 'auto'
   }
   return <div style={divStyle}>{displays}</div> ;
 
@@ -269,33 +292,41 @@ function Frame(props) {
 class Display extends Component {
   constructor(props) {
     super(props);
-
-    const merge = (x, y) => {return ( x - y);};
-
-    this.divStyle = {
-      transform: 'rotate('+ props.monitor.rotationDegree + 'rad)',
-      transformOrigin: '50% 50% 0px',
-      position: 'absolute',
-      opacity: 1,
-      // left: merge(props.monitor.centerX, props.monitor.width/2) + 'px',
-      // top: merge(props.monitor.centerY, props.monitor.height/2) + 'px'
-      left: merge(props.monitor.width, props.monitor.containerWidth) + 'px',
-      top: merge(props.monitor.height, props.monitor.containerHeight) + 'px'
-      // left: props.monitor.centerX  + 'px',
-      // top: props.monitor.centerY  + 'px'
-      // left: props.monitor.containerX  + 'px',
-      // top: props.monitor.containerY  + 'px'
-    } ;
-
+    this.state = {x:0, y:0};
     this.handleClick = this.handleClick.bind(this);
 
+    // this.divStyle = {
+    //   transform: 'rotate('+ this.props.monitor.rotationDegree + 'rad) translate(' + this.state.x +',' + this.state.y + ')',
+    //   transformOrigin: '50% 50% 0',
+    //   position: 'absolute',
+    //   opacity: 1,
+    //   left: this.props.monitor.left  + 'px',
+    //   top: this.props.monitor.top  + 'px'
+    // }
+
   }
+
+
+
   handleClick() {
       const dimensions = this.refs.display.getBoundingClientRect();
       console.log('this is:',  dimensions.width + " x " + dimensions.height);
       const dim = makeTransDimesions({height: this.props.monitor.height, width:this.props.monitor.width }, this.props.monitor.rotationDegree);
       console.log ('dim calc: ' + dim.width + "x" + dim.height);
       // makeData(Data);
+      console.log('display: ' );
+      console.log(this.props.monitor );
+
+      // this.divStyle.transform += ' translate(10px, 10px)';
+      this.setState({x:100, y:100});
+      // this.forceUpdate();
+      // this.divStyle = {
+      //   position: 'absolute'
+      // }
+
+      // console.log(this.divStyle);
+      // this.render();
+
 
     }
 
@@ -306,7 +337,17 @@ class Display extends Component {
   // }
 
   render() {
-      return (<div style={this.divStyle} onClick={this.handleClick} ref='display'>
+
+    var divStyle = {
+      transform: 'rotate('+ this.props.monitor.rotationDegree + 'rad) translate(' + this.state.x +',' + this.state.y + ')',
+      transformOrigin: '50% 50% 0',
+      position: 'absolute',
+      opacity: 1,
+      left: this.props.monitor.left  + 'px',
+      top: this.props.monitor.top  + 'px'
+    }
+
+      return (<div style={divStyle} onClick={this.handleClick} ref='display'>
                 <img src={monitorImg} height={this.props.monitor.height} width={this.props.monitor.width}/>
             </div> );
     }
@@ -331,6 +372,9 @@ function makeContainerDim(zoneDisplay) {
   newZoneDisplay.containerY = newZoneDisplay.centerY - obj.height/2;
   newZoneDisplay.containerRight = newZoneDisplay.centerX + obj.width/2;
   newZoneDisplay.containerBottom = newZoneDisplay.centerY + obj.height/2;
+  newZoneDisplay.left = newZoneDisplay.centerX - newZoneDisplay.width/2;
+  newZoneDisplay.top = newZoneDisplay.centerY - newZoneDisplay.height/2;
+
   return newZoneDisplay;
 }
 
