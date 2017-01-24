@@ -209,7 +209,6 @@ var Data4 = {
   ]
 };
 
-
 var Data5 = {
   "zoneId": "13F0950C-3CF7-4018-B7B3-D3326FBFFBE7",
   "zoneName": "Привет мир",
@@ -253,6 +252,7 @@ class App extends Component {
         <Frame data={Data3}/>
         <Frame data={Data4}/>
         <Frame data={Data5}/>
+        <MyComponent />
 
       </div>
     );
@@ -307,6 +307,18 @@ class Display extends Component {
   }
 
 
+  makeStyle() {
+    return {
+      transform: 'rotate('+ this.props.monitor.rotationDegree + 'rad) translate(' + this.state.x +'px,' + this.state.y + 'px)',
+      transformOrigin: '50% 50% 0',
+      position: 'absolute',
+      opacity: 1,
+      left: this.props.monitor.left  + 'px',
+      top: this.props.monitor.top  + 'px'
+    };
+  }
+
+
 
   handleClick() {
       const dimensions = this.refs.display.getBoundingClientRect();
@@ -316,38 +328,24 @@ class Display extends Component {
       // makeData(Data);
       console.log('display: ' );
       console.log(this.props.monitor );
-
-      // this.divStyle.transform += ' translate(10px, 10px)';
       this.setState({x:100, y:100});
-      // this.forceUpdate();
-      // this.divStyle = {
-      //   position: 'absolute'
-      // }
-
-      // console.log(this.divStyle);
+      console.log(this.divStyle);
       // this.render();
 
 
     }
 
-
-
-  // componentDidMount() {
-  //   this.handleClick();
-  // }
-
   render() {
 
-    var divStyle = {
-      transform: 'rotate('+ this.props.monitor.rotationDegree + 'rad) translate(' + this.state.x +',' + this.state.y + ')',
+    const localStyle = {
+      transform: 'rotate('+ this.props.monitor.rotationDegree + 'rad) translate(' + this.state.x +'px,' + this.state.y + 'px)',
       transformOrigin: '50% 50% 0',
       position: 'absolute',
       opacity: 1,
       left: this.props.monitor.left  + 'px',
       top: this.props.monitor.top  + 'px'
     }
-
-      return (<div style={divStyle} onClick={this.handleClick} ref='display'>
+      return (<div style={localStyle} onClick={this.handleClick} ref='display'>
                 <img src={monitorImg} height={this.props.monitor.height} width={this.props.monitor.width}/>
             </div> );
     }
@@ -384,4 +382,22 @@ function makeData(data) {
 
   console.log(newData);
   return newData;
+}
+
+class MyComponent extends Component {
+
+  handleButtonClick() {
+    this.forceUpdate();
+  }
+
+  render() {
+    return (
+      <div>
+        {Math.random()}
+        <button onClick={this.handleButtonClick.bind(this)}>
+          Click me
+        </button>
+      </div>
+    )
+  }
 }
