@@ -34,6 +34,7 @@ Meteor.methods({
       username: Meteor.users.findOne(this.userId).username,
     });
   },
+
   'tasks.remove'(taskId) {
     check(taskId, String);
 
@@ -45,6 +46,7 @@ Meteor.methods({
 
     Tasks.remove(taskId);
   },
+
   'tasks.setChecked'(taskId, setChecked) {
     check(taskId, String);
     check(setChecked, Boolean);
@@ -58,6 +60,7 @@ Meteor.methods({
 
     Tasks.update(taskId, { $set: { checked: setChecked } });
   },
+
   'tasks.setPrivate'(taskId, setToPrivate) {
     check(taskId, String);
     check(setToPrivate, Boolean);
