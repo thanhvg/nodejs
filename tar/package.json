@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "block-stream": "*",
+    "child-process": "^1.0.2",
     "fstream": "^1.0.2",
     "inherits": "2"
   },
