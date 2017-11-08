@@ -83,7 +83,7 @@ function getFailoverGroup(next) {
 
 function postFailoverGroup(next) {
   var query  = JSON.stringify({
-    groupname: "wtf"
+    groupname: "huh"
   });
 
   var options = {
@@ -114,8 +114,6 @@ function postFailoverGroup(next) {
 }
 
 function deleteFailoverGroup(next) {
-
-
   var options = {
       host: '192.168.121.19',
       port: 9000,
